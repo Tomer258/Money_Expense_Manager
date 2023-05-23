@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Money Expense Manager</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mrkrab">mrkrab</string>
+    <string name="sign_up">Sign up</string>
+    <string name="email">Email</string>
+    <string name="password">password</string>
+    <string name="already_have_an_user_login">Already have an user? Login!</string>
+    <string name="sign_up2">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_a_user_sign_up">Don\'t have a user? Sign Up!</string>
+    <string name="more">More</string>
+    <string name="stats">Stats</string>
+    <string name="shared">Shared</string>
+    <string name="transactions">Transactions</string>
+</resources>
