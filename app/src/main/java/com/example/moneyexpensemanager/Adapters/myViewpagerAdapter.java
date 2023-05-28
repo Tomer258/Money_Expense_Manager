@@ -12,7 +12,7 @@ import com.google.android.material.tabs.TabLayout;
 public class myViewpagerAdapter extends FragmentStateAdapter
 {
     TabLayout tabLayout;
-    public myViewpagerAdapter(@NonNull FragmentActivity fragmentActivity, TabLayout tabLayout) {
+    public myViewpagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
         this.tabLayout=tabLayout;
     }
@@ -40,6 +40,6 @@ public class myViewpagerAdapter extends FragmentStateAdapter
 
     @Override
     public int getItemCount() {
-        return tabLayout.getTabCount();
+        return 2;
     }
 }

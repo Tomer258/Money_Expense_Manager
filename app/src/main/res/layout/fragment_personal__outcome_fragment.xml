@@ -7,23 +7,10 @@
 
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="outcome fragment" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/outcome_addBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="60dp"
-        android:backgroundTint="@color/lavender"
-        android:contentDescription="Add expense"
-        android:src="@drawable/baseline_add_24"
-        android:elevation="2dp"/>
+        android:text="outcome fragment" />
+
 
 
 </RelativeLayout>
