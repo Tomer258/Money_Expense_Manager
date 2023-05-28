@@ -14,4 +14,31 @@
     <string name="stats">Stats</string>
     <string name="shared">Shared</string>
     <string name="transactions">Transactions</string>
+
+    <string-array name="type_array">
+        <item>Cash</item>
+        <item>Card</item>
+        <item>Wire Transfer</item>
+    </string-array>
+    <string-array name="income_Category_array">
+        <item>Salary</item>
+        <item>Allowance</item>
+        <item>Petty cash</item>
+        <item>Bonus</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="outcome_Category_array">
+        <item>Pets</item>
+        <item>Social life</item>
+        <item>Food</item>
+        <item>Household</item>
+        <item>Culture</item>
+        <item>Transport</item>
+        <item>Health</item>
+        <item>Beauty</item>
+        <item>Gift</item>
+        <item>Education</item>
+        <item>Other</item>
+    </string-array>
 </resources>
