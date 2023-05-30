@@ -26,27 +26,37 @@ import com.example.moneyexpensemanager.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Personal_fragment extends Fragment {
+
+    ViewPager2 viewPager2;
+    TabLayout tabLayout;
     FloatingActionButton addButton;
     String TypeSpinnerResult,CategorySpinnerResult;
     Dialog dialog;
     String type="";
+
+    Spinner typeSpinner,categorySpinner;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal_fragment, container, false);
-        TabLayout tabLayout=view.findViewById(R.id.tabLayout_container);
-        ViewPager2 viewPager2=view.findViewById(R.id.personal_viewPager);
-        FragmentStateAdapter fragmentStateAdapter=new myViewpagerAdapter(getActivity());
-        viewPager2.setAdapter(fragmentStateAdapter);
-        addButton=view.findViewById(R.id.main_addBTN);
+
+        //dialog
         initDialog();
+
+        //yes
+        initFragment(view);
+
         //Spinners
-        Spinner typeSpinner=dialog.findViewById(R.id.typeSpinner);
-        Spinner categorySpinner=dialog.findViewById(R.id.categorySpinner);
-        initSpinners(typeSpinner,categorySpinner);
+
+        initSpinners();
+
+        //Firebase stuff
+        String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -55,8 +65,7 @@ public class Personal_fragment extends Fragment {
                 viewPager2.setCurrentItem(tab.getPosition());
 
                 type=tabLayout.getTabAt(tab.getPosition()).getText().toString();
-                Toast.makeText(getContext(), type,Toast.LENGTH_SHORT).show();
-                initSpinners(typeSpinner,categorySpinner);
+                initSpinners();
 
             }
 
@@ -78,8 +87,7 @@ public class Personal_fragment extends Fragment {
                 tabLayout.getTabAt(position).select();
 
                 type=tabLayout.getTabAt(position).getText().toString();
-                Toast.makeText(getContext(), type,Toast.LENGTH_SHORT).show();
-                initSpinners(typeSpinner,categorySpinner);
+                initSpinners();
             }
         });
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +115,7 @@ public class Personal_fragment extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"DEAD DIALOG",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"DEAD DIALOG",Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -115,9 +123,9 @@ public class Personal_fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (type.equals("Income"))
-                    Toast.makeText(getContext(), "ADD INCOME FUNCTION",Toast.LENGTH_LONG).show();
+                    addIncomeToUser();
                 else
-                    Toast.makeText(getContext(), "ADD OUTCOME FUNCTION",Toast.LENGTH_LONG).show();
+                    addOutcomeToUser();
                 dialog.dismiss();
             }
         });
@@ -125,8 +133,7 @@ public class Personal_fragment extends Fragment {
 
     }
 
-
-    void initSpinners( Spinner typeSpinner, Spinner categorySpinner)
+    void initSpinners()
     {
         //type Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -163,6 +170,25 @@ public class Personal_fragment extends Fragment {
 
             }
         });
+    }
+
+    public void initFragment(View view)
+    {
+        tabLayout=view.findViewById(R.id.tabLayout_container);
+        viewPager2=view.findViewById(R.id.personal_viewPager);
+        FragmentStateAdapter fragmentStateAdapter=new myViewpagerAdapter(getActivity());
+        viewPager2.setAdapter(fragmentStateAdapter);
+        addButton=view.findViewById(R.id.main_addBTN);
+        typeSpinner=dialog.findViewById(R.id.typeSpinner);
+        categorySpinner=dialog.findViewById(R.id.categorySpinner);
+    }
+
+    private void addOutcomeToUser() {
+        Toast.makeText(getContext(), "ADD OUTCOME FUNCTION",Toast.LENGTH_SHORT).show();
+    }
+
+    private void addIncomeToUser() {
+        Toast.makeText(getContext(), "ADD INCOME FUNCTION",Toast.LENGTH_SHORT).show();
     }
 
 }

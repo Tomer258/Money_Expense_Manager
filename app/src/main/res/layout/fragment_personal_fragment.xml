@@ -25,11 +25,84 @@
 
 
     </com.google.android.material.tabs.TabLayout>
+    <RelativeLayout
+        android:id="@+id/total_Container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabLayout_container"
+        android:layout_marginTop="10dp"
+        android:paddingHorizontal="15dp"
+        android:background="@drawable/total_border"
+        >
+
+        <TextView
+            android:id="@+id/totalIncome_TXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Income: "
+            android:textSize="14sp"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/black"
+
+            />
+        <TextView
+            android:id="@+id/totalIncomeAmount_TXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/totalIncome_TXT"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:id="@+id/totalOutcome_TXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Outcome: "
+            android:textSize="14sp"
+            android:layout_toLeftOf="@+id/totalOutcomeAmount_TXT"
+            android:textColor="@color/black"
+
+            />
+        <TextView
+            android:id="@+id/totalOutcomeAmount_TXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0"
+            android:textSize="14sp"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/black"
+
+            />
+        <TextView
+            android:id="@+id/totalBalance_TXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Balance: "
+            android:textSize="14sp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/totalIncome_TXT"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:id="@+id/totalBalanceAmount_TXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/totalBalance_TXT"
+            android:layout_below="@+id/totalIncome_TXT"
+            android:textColor="@color/black"
+
+            />
+
+    </RelativeLayout>
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/personal_viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/tabLayout_container"
+        android:layout_below="@+id/total_Container"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
