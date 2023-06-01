@@ -1,15 +1,22 @@
 package com.example.moneyexpensemanager.Models;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class OutcomeModel {
     private int outcomeAmount=0;
     private String date,type,category,description;
 
-    public OutcomeModel(int outcomeAmount, String date, String type, String category, String description) {
+    public OutcomeModel(int outcomeAmount, String type, String category, String description) {
         this.outcomeAmount = outcomeAmount;
-        this.date = date;
+        this.date=new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         this.type = type;
         this.category = category;
         this.description = description;
+    }
+
+    public OutcomeModel() {
     }
 
     public int getOutcomeAmount() {

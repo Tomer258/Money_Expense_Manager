@@ -5,15 +5,12 @@ package com.example.moneyexpensemanager.Models;
 import java.util.ArrayList;
 
 public class userExpense {
-    private String uID;
-    private ArrayList<IncomeModel> incomeList=null;
-    private ArrayList<OutcomeModel> outcomeList=null;
+
+    private ArrayList<IncomeModel> incomeList=new ArrayList<>();
+    private ArrayList<OutcomeModel> outcomeList=new ArrayList<>();
     private int sumOfIncome=0,sumOfOutcome=0;
 
-    public userExpense(String uID) {
-        this.uID=uID;
-        incomeList=new ArrayList<>();
-        outcomeList=new ArrayList<>();
+    public userExpense() {
     }
 
     public void addIncome(IncomeModel incomeModel)
@@ -38,5 +35,41 @@ public class userExpense {
     {
         if(outcomeList.remove(outcomeModel))
             this.sumOfOutcome-=outcomeModel.getOutcomeAmount();
+    }
+
+    public ArrayList<IncomeModel> getIncomeList() {
+        return incomeList;
+    }
+
+    public userExpense setIncomeList(ArrayList<IncomeModel> incomeList) {
+        this.incomeList = incomeList;
+        return this;
+    }
+
+    public ArrayList<OutcomeModel> getOutcomeList() {
+        return outcomeList;
+    }
+
+    public userExpense setOutcomeList(ArrayList<OutcomeModel> outcomeList) {
+        this.outcomeList = outcomeList;
+        return this;
+    }
+
+    public int getSumOfIncome() {
+        return sumOfIncome;
+    }
+
+    public userExpense setSumOfIncome(int sumOfIncome) {
+        this.sumOfIncome = sumOfIncome;
+        return this;
+    }
+
+    public int getSumOfOutcome() {
+        return sumOfOutcome;
+    }
+
+    public userExpense setSumOfOutcome(int sumOfOutcome) {
+        this.sumOfOutcome = sumOfOutcome;
+        return this;
     }
 }

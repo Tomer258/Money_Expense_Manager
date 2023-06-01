@@ -9,12 +9,15 @@ public class IncomeModel {
     private int incomeAmount=0;
     private String date,type,category,description;
 
-    public IncomeModel(int incomeAmount, String date, String type, String category, String description) {
+    public IncomeModel(int incomeAmount, String type, String category, String description) {
         this.incomeAmount = incomeAmount;
         this.date=new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         this.type = type;
         this.category = category;
         this.description = description;
+    }
+
+    public IncomeModel() {
     }
 
     public int getIncomeAmount() {

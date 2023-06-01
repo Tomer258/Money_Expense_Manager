@@ -5,29 +5,47 @@ import static androidx.appcompat.content.res.AppCompatResources.getDrawable;
 import android.app.Dialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.moneyexpensemanager.Adapters.myViewpagerAdapter;
+import com.example.moneyexpensemanager.Models.IncomeModel;
+import com.example.moneyexpensemanager.Models.OutcomeModel;
+import com.example.moneyexpensemanager.Models.userExpense;
 import com.example.moneyexpensemanager.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.SetOptions;
 
 public class Personal_fragment extends Fragment {
 
@@ -37,13 +55,19 @@ public class Personal_fragment extends Fragment {
     String TypeSpinnerResult,CategorySpinnerResult;
     Dialog dialog;
     String type="";
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     Spinner typeSpinner,categorySpinner;
+    TextView totalIncome,totalOutcome,totalBalance;
+    userExpense userExpense;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal_fragment, container, false);
+
+        getUserExpense();
+
+        updateTotalView();
 
         //dialog
         initDialog();
@@ -55,8 +79,8 @@ public class Personal_fragment extends Fragment {
 
         initSpinners();
 
-        //Firebase stuff
-        String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        updateTotalView();
+
 
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -181,14 +205,105 @@ public class Personal_fragment extends Fragment {
         addButton=view.findViewById(R.id.main_addBTN);
         typeSpinner=dialog.findViewById(R.id.typeSpinner);
         categorySpinner=dialog.findViewById(R.id.categorySpinner);
+        totalIncome=view.findViewById(R.id.totalIncomeAmount_TXT);
+        totalOutcome=view.findViewById(R.id.totalOutcomeAmount_TXT);
+        totalBalance=view.findViewById(R.id.totalBalanceAmount_TXT);
     }
 
     private void addOutcomeToUser() {
-        Toast.makeText(getContext(), "ADD OUTCOME FUNCTION",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "ADD OUTCOME FUNCTION",Toast.LENGTH_SHORT).show();
+        EditText amount=dialog.findViewById(R.id.addAmount_TXT);
+        EditText description=dialog.findViewById(R.id.addDescription);
+        if (amount.getText().toString().equals("") ||description.getText().toString().equals(""))
+            Toast.makeText(getContext(), "Unvalid input",Toast.LENGTH_SHORT).show();
+        else
+        {
+            int amountInt=Integer.parseInt(amount.getText().toString().replaceAll("[\\D]",""));
+            userExpense.addOutcome(new OutcomeModel(amountInt,TypeSpinnerResult,CategorySpinnerResult,description.getText().toString()));
+            DocumentReference docIdRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            docIdRef.set(userExpense, SetOptions.merge());
+
+        }
+        amount.getText().clear();
+        description.getText().clear();
     }
 
     private void addIncomeToUser() {
-        Toast.makeText(getContext(), "ADD INCOME FUNCTION",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "ADD INCOME FUNCTION",Toast.LENGTH_SHORT).show();
+        EditText amount=dialog.findViewById(R.id.addAmount_TXT);
+        EditText description=dialog.findViewById(R.id.addDescription);
+        if (amount.getText().toString().equals("") ||description.getText().toString().equals(""))
+            Toast.makeText(getContext(), "Unvalid input",Toast.LENGTH_SHORT).show();
+        else
+        {
+            int amountInt=Integer.parseInt(amount.getText().toString().replaceAll("[\\D]",""));
+            userExpense.addIncome(new IncomeModel(amountInt,TypeSpinnerResult,CategorySpinnerResult,description.getText().toString()));
+            DocumentReference docIdRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            docIdRef.set(userExpense, SetOptions.merge());
+        }
+        amount.getText().clear();
+        description.getText().clear();
     }
+
+    private void getUserExpense()
+    {
+
+        DocumentReference docIdRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        DocumentReference docRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                userExpense = documentSnapshot.toObject(userExpense.class);
+                                updateTotalView();
+                            }
+                        });
+                    } else {
+                            userExpense=new userExpense();
+                    }
+                } else {
+                    Log.d("GET USER  |", "Failed with: ", task.getException());
+                }
+            }
+        });
+
+        docIdRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("FireStore Snapshot Listener  |", "Listen failed.", e);
+                    return;
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    userExpense=snapshot.toObject(userExpense.class);
+                    updateTotalView();
+                } else {
+                }
+            }
+        });
+    }
+
+    public void updateTotalView()
+    {
+        if (userExpense!=null)
+        {
+            String income=userExpense.getSumOfIncome() +"";
+            String outcome=userExpense.getSumOfOutcome()+"";
+            String balance=(userExpense.getSumOfIncome()-userExpense.getSumOfOutcome())+"";
+            totalOutcome.setText(outcome);
+            totalIncome.setText(income);
+            totalBalance.setText(balance);
+        }
+
+
+    }
+
 
 }

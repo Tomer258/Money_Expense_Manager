@@ -10,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.example.moneyexpensemanager.Models.IncomeModel;
 import com.example.moneyexpensemanager.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 
 
 public class Personal_Income_fragment extends Fragment {
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
