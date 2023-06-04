@@ -58,4 +58,15 @@ public class OutcomeModel {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "OutcomeModel{" +
+                "outcomeAmount=" + outcomeAmount +
+                ", date='" + date + '\'' +
+                ", type='" + type + '\'' +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

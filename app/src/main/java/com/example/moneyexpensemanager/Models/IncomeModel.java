@@ -59,4 +59,15 @@ public class IncomeModel {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "IncomeModel{" +
+                "incomeAmount=" + incomeAmount +
+                ", date='" + date + '\'' +
+                ", type='" + type + '\'' +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
