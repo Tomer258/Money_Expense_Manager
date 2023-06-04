@@ -4,6 +4,7 @@ package com.example.moneyexpensemanager.fragments;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.moneyexpensemanager.Adapters.RecyclerViewAdapter;
@@ -21,71 +23,70 @@ import com.example.moneyexpensemanager.Models.OutcomeModel;
 import com.example.moneyexpensemanager.Models.userExpense;
 import com.example.moneyexpensemanager.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Personal_Income_fragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    ArrayList<IncomeModel> incomeModel;
+    ArrayList<IncomeModel> income = new ArrayList<>();
+
+     userExpense userExpense;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal__income_fragment, container, false);
-        getArrayLists();
+        userExpense expense=getListItems();
+        Log.d("FUCK ME",expense.getIncomeList().toString());
+
         RecyclerView recyclerView = view.findViewById(R.id.mRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        RecyclerViewAdapter recyclerViewAdapter=new RecyclerViewAdapter(incomeModel,null,0);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(income, null, 0);
         recyclerView.setAdapter(recyclerViewAdapter);
 
-        if (incomeModel!=null)
-        {
-            TextView noListFound=view.findViewById(R.id.noIncomeFound_TXT);
+        if (income != null) {
+            TextView noListFound = view.findViewById(R.id.noIncomeFound_TXT);
             noListFound.setVisibility(View.GONE);
         }
-
-
-
-
-
 
 
         return view;
     }
 
-    private void getArrayLists()
-    {
+    private userExpense getListItems() {
+        userExpense=new userExpense();
         DocumentReference docIdRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
         docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        DocumentReference docRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                incomeModel = (ArrayList<IncomeModel>) document.get("incomeList");
-                                Log.d("INCOME LIST RV |", incomeModel.toString());
-                                //outcomeModel=   (ArrayList<OutcomeModel>) document.get("outcomeList");
-                                //Log.d("OUTCOME LIST RV |", outcomeModel.toString());
-                            }
-                        });
-                    } else {
-                    }
-                } else {
-                    Log.d("GET USER  |", "Failed with: ", task.getException());
-                }
+               if (task.isSuccessful())
+               {
+                   DocumentSnapshot documentSnapshot=task.getResult();
+                   if (documentSnapshot!=null)
+                   {
+                       userExpense=documentSnapshot.toObject(userExpense.class);
+                   }
+               }
             }
         });
+        return userExpense;
     }
+
+
 }
+
+

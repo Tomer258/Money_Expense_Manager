@@ -17,6 +17,14 @@ public class IncomeModel {
         this.description = description;
     }
 
+    public IncomeModel(int incomeAmount, String type, String category, String description,String date) {
+        this.incomeAmount = incomeAmount;
+        this.date=date;
+        this.type = type;
+        this.category = category;
+        this.description = description;
+    }
+
     public IncomeModel() {
     }
 
