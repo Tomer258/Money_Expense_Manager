@@ -39,8 +39,11 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -62,7 +65,7 @@ public class Personal_fragment extends Fragment {
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     Spinner typeSpinner,categorySpinner;
     TextView totalIncome,totalOutcome,totalBalance;
-    userExpense userExpense;
+    private userExpense userExpenseInstance;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -223,11 +226,8 @@ public class Personal_fragment extends Fragment {
         else
         {
             int amountInt=Integer.parseInt(amount.getText().toString().replaceAll("[\\D]",""));
-            userExpense.addOutcome(new OutcomeModel(amountInt,TypeSpinnerResult,CategorySpinnerResult,description.getText().toString()));
-            DocumentReference docIdRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            docIdRef.set(userExpense, SetOptions.merge());
-
-            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userExpense);
+            userExpenseInstance.addOutcome(new OutcomeModel(amountInt,TypeSpinnerResult,CategorySpinnerResult,description.getText().toString()));
+            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userExpenseInstance);
 
         }
         amount.getText().clear();
@@ -243,11 +243,9 @@ public class Personal_fragment extends Fragment {
         else
         {
             int amountInt=Integer.parseInt(amount.getText().toString().replaceAll("[\\D]",""));
-            userExpense.addIncome(new IncomeModel(amountInt,TypeSpinnerResult,CategorySpinnerResult,description.getText().toString()));
-            DocumentReference docIdRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            docIdRef.set(userExpense, SetOptions.merge());
+            userExpenseInstance.addIncome(new IncomeModel(amountInt,TypeSpinnerResult,CategorySpinnerResult,description.getText().toString()));
 
-            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userExpense);
+            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userExpenseInstance);
         }
         amount.getText().clear();
         description.getText().clear();
@@ -255,56 +253,35 @@ public class Personal_fragment extends Fragment {
 
     private void getUserExpense()
     {
-
-        DocumentReference docIdRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        DatabaseReference users=FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid());
+        users.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        DocumentReference docRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                userExpense = documentSnapshot.toObject(userExpense.class);
-                                updateTotalView();
-                            }
-                        });
-                    } else {
-                            userExpense=new userExpense();
-                    }
-                } else {
-                    Log.d("GET USER  |", "Failed with: ", task.getException());
-                }
-            }
-        });
-
-        docIdRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("FireStore Snapshot Listener  |", "Listen failed.", e);
-                    return;
-                }
-
-                if (snapshot != null && snapshot.exists()) {
-                    userExpense=snapshot.toObject(userExpense.class);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                userExpense value = dataSnapshot.getValue(userExpense.class);
+                if(value!=null)
+                {
+                    userExpenseInstance=value;
                     updateTotalView();
-                } else {
+                }
+                else
+                {
+                    userExpenseInstance=new userExpense();
                 }
             }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error){}
         });
     }
 
     public void updateTotalView()
     {
-        if (userExpense!=null)
+        if (userExpenseInstance!=null)
         {
-            String income=userExpense.getSumOfIncome() +"";
-            String outcome=userExpense.getSumOfOutcome()+"";
-            String balance=(userExpense.getSumOfIncome()-userExpense.getSumOfOutcome())+"";
+            String income=userExpenseInstance.getSumOfIncome() +"";
+            String outcome=userExpenseInstance.getSumOfOutcome()+"";
+            String balance=(userExpenseInstance.getSumOfIncome()-userExpenseInstance.getSumOfOutcome())+"";
             totalOutcome.setText(outcome);
             totalIncome.setText(income);
             totalBalance.setText(balance);

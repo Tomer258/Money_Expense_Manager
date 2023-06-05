@@ -1,10 +1,13 @@
 package com.example.moneyexpensemanager.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 
 
 //import com.example.moneyexpensemanager.Adapters.RecyclerViewAdapter;
+import com.example.moneyexpensemanager.Adapters.RecyclerViewAdapter;
 import com.example.moneyexpensemanager.Models.IncomeModel;
 import com.example.moneyexpensemanager.Models.userExpense;
 import com.example.moneyexpensemanager.R;
@@ -38,12 +42,16 @@ public class Personal_Income_fragment extends Fragment {
     userExpense userExpenseInstance = new userExpense();
     TextView noListFound;
     String save;
+
+    RecyclerView recyclerView;
+
+    Context context;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal__income_fragment, container, false);
-        noListFound = view.findViewById(R.id.noIncomeFound_TXT);
+        initViews(view);
 
 
         processDataBase();
@@ -76,19 +84,25 @@ public class Personal_Income_fragment extends Fragment {
 
     private void print()
     {
-        String omo=new Gson().toJson(userExpenseInstance);
-        noListFound.setText(omo);
+        //String omo=new Gson().toJson(userExpenseInstance);
+        //noListFound.setText(save);
+        income=userExpenseInstance.getIncomeList();
 
-
-        //RecyclerView recyclerView = view.findViewById(R.id.mRecyclerView);
-        // recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        // RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(income, null, 0);
-        //recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(income, null, 0);
+        recyclerView.setAdapter(recyclerViewAdapter);
 
         if (income != null) {
 
             noListFound.setVisibility(View.GONE);
         }
+    }
+
+    private void initViews(View view)
+    {
+        noListFound = view.findViewById(R.id.noIncomeFound_TXT);
+        recyclerView = view.findViewById(R.id.mRecyclerView);
+        context=view.getContext();
     }
 }
 
