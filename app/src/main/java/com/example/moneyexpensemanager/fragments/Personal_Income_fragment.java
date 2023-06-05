@@ -37,60 +37,24 @@ public class Personal_Income_fragment extends Fragment {
     ArrayList<IncomeModel> income;
     userExpense userExpenseInstance = new userExpense();
     TextView noListFound;
-
     String save;
-    int num;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal__income_fragment, container, false);
-        income = userExpenseInstance.getIncomeList();
-        //getListItems();
-        omo();
-        num=1;
-        //Toast.makeText(getActivity(),"Im inside Main thread",Toast.LENGTH_LONG).show();
+        noListFound = view.findViewById(R.id.noIncomeFound_TXT);
+
+
+        processDataBase();
+
         Log.d("FUCK ME", "shit");
-
-
-        System.out.println(save);
-        //RecyclerView recyclerView = view.findViewById(R.id.mRecyclerView);
-        // recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        // RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(income, null, 0);
-        //recyclerView.setAdapter(recyclerViewAdapter);
-        if (income != null) {
-            noListFound = view.findViewById(R.id.noIncomeFound_TXT);
-            //noListFound.setVisibility(View.GONE);
-        }
-
 
         return view;
     }
 
-    private void getListItems() {
 
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                Toast.makeText(getActivity(),"Im inside bitch",Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("zibi", "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-
-
-
-        //mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(postListener);
-
-
-    }
-
-    private void omo()
+    private void processDataBase()
     {
         DatabaseReference users=FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid());
         users.addValueEventListener(new ValueEventListener()
@@ -114,6 +78,17 @@ public class Personal_Income_fragment extends Fragment {
     {
         String omo=new Gson().toJson(userExpenseInstance);
         noListFound.setText(omo);
+
+
+        //RecyclerView recyclerView = view.findViewById(R.id.mRecyclerView);
+        // recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        // RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(income, null, 0);
+        //recyclerView.setAdapter(recyclerViewAdapter);
+
+        if (income != null) {
+
+            noListFound.setVisibility(View.GONE);
+        }
     }
 }
 
