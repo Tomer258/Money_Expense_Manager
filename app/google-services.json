@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "761666073672",
+    "firebase_url": "https://expense-manager-f6d22-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "expense-manager-f6d22",
     "storage_bucket": "expense-manager-f6d22.appspot.com"
   },

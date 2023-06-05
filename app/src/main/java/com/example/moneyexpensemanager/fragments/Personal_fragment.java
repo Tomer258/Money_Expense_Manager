@@ -39,6 +39,8 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -56,6 +58,8 @@ public class Personal_fragment extends Fragment {
     Dialog dialog;
     String type="";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     Spinner typeSpinner,categorySpinner;
     TextView totalIncome,totalOutcome,totalBalance;
     userExpense userExpense;
@@ -223,6 +227,8 @@ public class Personal_fragment extends Fragment {
             DocumentReference docIdRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
             docIdRef.set(userExpense, SetOptions.merge());
 
+            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userExpense);
+
         }
         amount.getText().clear();
         description.getText().clear();
@@ -240,6 +246,8 @@ public class Personal_fragment extends Fragment {
             userExpense.addIncome(new IncomeModel(amountInt,TypeSpinnerResult,CategorySpinnerResult,description.getText().toString()));
             DocumentReference docIdRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
             docIdRef.set(userExpense, SetOptions.merge());
+
+            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userExpense);
         }
         amount.getText().clear();
         description.getText().clear();

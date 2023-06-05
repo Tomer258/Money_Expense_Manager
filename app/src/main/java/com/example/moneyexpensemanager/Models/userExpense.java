@@ -7,10 +7,11 @@ import java.util.ArrayList;
 public class userExpense {
 
     private ArrayList<IncomeModel> incomeList=new ArrayList<>();
-    private ArrayList<OutcomeModel> outcomeList=new ArrayList<>();
+    private ArrayList<OutcomeModel> outcomeList= new ArrayList<>();
     private int sumOfIncome=0,sumOfOutcome=0;
 
     public userExpense() {
+
     }
 
     public void addIncome(IncomeModel incomeModel)
@@ -39,6 +40,11 @@ public class userExpense {
 
     public ArrayList<IncomeModel> getIncomeList() {
         return incomeList;
+    }
+
+    public IncomeModel getIncomeModelAt(int i)
+    {
+        return  incomeList.get(i);
     }
 
     public userExpense setIncomeList(ArrayList<IncomeModel> incomeList) {
@@ -71,5 +77,15 @@ public class userExpense {
     public userExpense setSumOfOutcome(int sumOfOutcome) {
         this.sumOfOutcome = sumOfOutcome;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "userExpense{" +
+                "incomeList=" + incomeList +
+                ", outcomeList=" + outcomeList +
+                ", sumOfIncome=" + sumOfIncome +
+                ", sumOfOutcome=" + sumOfOutcome +
+                '}';
     }
 }

@@ -17,6 +17,7 @@ public class IncomeModel {
         this.description = description;
     }
 
+
     public IncomeModel(int incomeAmount, String type, String category, String description,String date) {
         this.incomeAmount = incomeAmount;
         this.date=date;
@@ -26,6 +27,15 @@ public class IncomeModel {
     }
 
     public IncomeModel() {
+    }
+
+    public void copyOf(IncomeModel other)
+    {
+        this.incomeAmount = other.incomeAmount;
+        this.date=other.date;
+        this.type = other.type;
+        this.category = other.category;
+        this.description = other.description;
     }
 
     public int getIncomeAmount() {
