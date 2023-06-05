@@ -10,5 +10,7 @@
     <color name="brightRed">#FB3C3C</color>
     <color name="lavender">#8692f7</color>
     <color name="customWhite">#E5E6EA</color>
+    <color name="green">#5CE63A</color>
+    <color name="red">#FF2F2F</color>
 
 </resources>

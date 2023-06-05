@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -281,10 +282,16 @@ public class Personal_fragment extends Fragment {
         {
             String income=userExpenseInstance.getSumOfIncome() +"";
             String outcome=userExpenseInstance.getSumOfOutcome()+"";
-            String balance=(userExpenseInstance.getSumOfIncome()-userExpenseInstance.getSumOfOutcome())+"";
+            int balance=userExpenseInstance.getSumOfIncome()-userExpenseInstance.getSumOfOutcome();
+            String balanceTXT=balance+"";
             totalOutcome.setText(outcome);
             totalIncome.setText(income);
-            totalBalance.setText(balance);
+            totalBalance.setText(balanceTXT);
+            if (balance<0)
+                totalBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.red));
+            else if (balance > 0)
+                totalBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.green));
+
         }
 
 

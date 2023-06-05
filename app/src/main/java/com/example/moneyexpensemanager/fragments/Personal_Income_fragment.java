@@ -35,13 +35,11 @@ import java.util.ArrayList;
 
 
 public class Personal_Income_fragment extends Fragment {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     ArrayList<IncomeModel> income;
     userExpense userExpenseInstance = new userExpense();
     TextView noListFound;
-    String save;
 
     RecyclerView recyclerView;
 
@@ -52,12 +50,7 @@ public class Personal_Income_fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal__income_fragment, container, false);
         initViews(view);
-
-
         processDataBase();
-
-        Log.d("FUCK ME", "shit");
-
         return view;
     }
 
@@ -74,7 +67,7 @@ public class Personal_Income_fragment extends Fragment {
                 if(value!=null)
                 {
                     userExpenseInstance=value;
-                    print();
+                    updateRV();
                 }
             }
             @Override
@@ -82,10 +75,8 @@ public class Personal_Income_fragment extends Fragment {
         });
     }
 
-    private void print()
+    private void updateRV()
     {
-        //String omo=new Gson().toJson(userExpenseInstance);
-        //noListFound.setText(save);
         income=userExpenseInstance.getIncomeList();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

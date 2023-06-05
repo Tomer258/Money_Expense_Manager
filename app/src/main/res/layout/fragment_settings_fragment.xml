@@ -46,19 +46,101 @@
 
 
     </RelativeLayout>
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/longline"
-    android:layout_marginTop="-50dp"/>
 
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="#000000"
+        android:orientation="vertical" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/family_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Family information"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/no_family_TXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No family? "
+        android:textSize="18sp"
+        android:layout_below="@+id/family_info"
+        />
+
+    <Button
+        android:id="@+id/createFamily_BTN_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create family"
+        android:textSize="12sp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/no_family_TXT"
+        android:layout_marginStart="15dp"
+        />
+
+        <TextView
+            android:id="@+id/got_family_TXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Got family?  Join them!"
+            android:textSize="18sp"
+            android:layout_below="@+id/createFamily_BTN_settings"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:id="@+id/join_family_ET"
+            android:background="@drawable/lavender_border"
+            android:layout_marginTop="20dp"
+            android:paddingStart="16dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="Enter family code"
+            android:gravity="start|center_vertical"
+            android:textColor="@color/lavender"
+            android:layout_below="@+id/got_family_TXT"
+            />
+
+        <Button
+            android:id="@+id/joinFamily_BTN_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Join family"
+            android:textSize="12sp"
+            android:layout_marginLeft="5dp"
+            android:layout_below="@+id/join_family_ET"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            />
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="#000000"
+        android:orientation="vertical" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Settings fragment"
         android:gravity="center"
         android:textSize="32sp"/>
+
+
+
+
 
 </LinearLayout>
