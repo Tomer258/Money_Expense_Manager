@@ -287,10 +287,10 @@ public class Personal_fragment extends Fragment {
             totalOutcome.setText(outcome);
             totalIncome.setText(income);
             totalBalance.setText(balanceTXT);
-            if (balance<0)
-                totalBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.red));
-            else if (balance > 0)
-                totalBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.green));
+            //if (balance<0)
+                //totalBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.red));
+            //else if (balance > 0)
+                //totalBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.green));
 
         }
 

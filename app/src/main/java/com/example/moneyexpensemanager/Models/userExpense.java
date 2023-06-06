@@ -5,6 +5,7 @@ package com.example.moneyexpensemanager.Models;
 import java.util.ArrayList;
 
 public class userExpense {
+    String familyCode="";
 
     private ArrayList<IncomeModel> incomeList=new ArrayList<>();
     private ArrayList<OutcomeModel> outcomeList= new ArrayList<>();
@@ -76,6 +77,15 @@ public class userExpense {
 
     public userExpense setSumOfOutcome(int sumOfOutcome) {
         this.sumOfOutcome = sumOfOutcome;
+        return this;
+    }
+
+    public String getFamilyCode() {
+        return familyCode;
+    }
+
+    public userExpense setFamilyCode(String familyCode) {
+        this.familyCode = familyCode;
         return this;
     }
 
