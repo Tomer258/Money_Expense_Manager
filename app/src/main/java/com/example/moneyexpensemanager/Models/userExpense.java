@@ -7,6 +7,8 @@ import java.util.ArrayList;
 public class userExpense {
     String familyCode="";
 
+    String name="";
+
     private ArrayList<IncomeModel> incomeList=new ArrayList<>();
     private ArrayList<OutcomeModel> outcomeList= new ArrayList<>();
     private int sumOfIncome=0,sumOfOutcome=0;
@@ -86,6 +88,15 @@ public class userExpense {
 
     public userExpense setFamilyCode(String familyCode) {
         this.familyCode = familyCode;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public userExpense setName(String name) {
+        this.name = name;
         return this;
     }
 

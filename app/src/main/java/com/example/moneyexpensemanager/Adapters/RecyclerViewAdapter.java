@@ -23,7 +23,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     ArrayList<OutcomeModel> outcome;
     int type;
 
-    //type:  0 - income , 1 - outcome
+    //type:  0 - income , 1 - outcome,
     public RecyclerViewAdapter(ArrayList<IncomeModel> incomeModel, ArrayList<OutcomeModel> outcomeModel, int type)
     {
         this.type=type;
