@@ -33,6 +33,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Settings_fragment extends Fragment {
     TextView textView,nofamily;
@@ -41,6 +42,7 @@ public class Settings_fragment extends Fragment {
     EditText familyCodeET;
 
     ArrayList<String> usersref=new ArrayList<>();
+    HashMap<String,userExpense> member=new HashMap<>();
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     @Override
@@ -110,34 +112,10 @@ public class Settings_fragment extends Fragment {
                 if (task.isSuccessful()) {
                     DataSnapshot dataSnapshot = task.getResult();
                     userExpense value = dataSnapshot.getValue(userExpense.class);
-                    if (value.getFamilyCode().equals(""))
+                    if (value!=null)
                     {
-
-                        family.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    if (task.isSuccessful())
-                                    {
-                                        DataSnapshot dataSnapshot = task.getResult();
-                                        GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
-                                        ArrayList<String> usersRefDB = dataSnapshot.getValue(t);
-                                        usersRefDB.add(key);
-                                        family.setValue(usersRefDB);
-
-                                        String family_key =family.getKey();
-                                        value.setFamilyCode(family_key);
-                                        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(value);
-                                        nofamily.setText("Part of family id: " +family_key);
-
-                                    }
-                                }
-                            });
-                    }
-                    else
-                    {
-                        if (!(value.getFamilyCode().equals(code)))
+                        if (value.getFamilyCode().equals(""))
                         {
-                            removeFromFamily(key);
 
                             family.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
@@ -145,9 +123,12 @@ public class Settings_fragment extends Fragment {
                                     if (task.isSuccessful())
                                     {
                                         DataSnapshot dataSnapshot = task.getResult();
-                                        GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
-                                        ArrayList<String> usersRefDB = dataSnapshot.getValue(t);
-                                        usersRefDB.add(key);
+                                        //GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
+                                        //ArrayList<String> usersRefDB = dataSnapshot.getValue(t);
+                                        GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
+                                        HashMap<String,userExpense> usersRefDB=dataSnapshot.getValue(t);
+                                        //usersRefDB.add(key);
+                                        usersRefDB.put(key,value);
                                         family.setValue(usersRefDB);
 
                                         String family_key =family.getKey();
@@ -160,9 +141,39 @@ public class Settings_fragment extends Fragment {
                             });
                         }
                         else
-                            Toast.makeText(getActivity(),"Cant Join Same Family",Toast.LENGTH_SHORT).show();
+                        {
+                            if (!(value.getFamilyCode().equals(code)))
+                            {
+                                removeFromFamily(key);
 
+                                family.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                        if (task.isSuccessful())
+                                        {
+                                            //GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
+                                            //ArrayList<String> usersRefDB = dataSnapshot.getValue(t);
+                                            GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
+                                            HashMap<String,userExpense> usersRefDB=dataSnapshot.getValue(t);
+                                            //usersRefDB.add(key);
+                                            usersRefDB.put(key,value);
+                                            family.setValue(usersRefDB);
+
+                                            String family_key =family.getKey();
+                                            value.setFamilyCode(family_key);
+                                            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(value);
+                                            nofamily.setText("Part of family id: " +family_key);
+
+                                        }
+                                    }
+                                });
+                            }
+                            else
+                                Toast.makeText(getActivity(),"Cant Join Same Family",Toast.LENGTH_SHORT).show();
+
+                        }
                     }
+
                 }
                 else {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
@@ -184,31 +195,39 @@ public class Settings_fragment extends Fragment {
                 if (task.isSuccessful()) {
                     DataSnapshot dataSnapshot = task.getResult();
                     userExpense value = dataSnapshot.getValue(userExpense.class);
-                    if (value.getFamilyCode().equals(""))
+                    if (value!=null)
                     {
-                        usersref.add(key);
-                        pushed.setValue(usersref);
-                        String family_key =pushed.getKey();
-                        value.setFamilyCode(family_key);
-                        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(value);
-                        nofamily.setText("Part of family id: " +family_key);
+                        if (value.getFamilyCode().equals(""))
+                        {
+                            usersref.add(key);
+                            member.put(key,value);
+                            //pushed.setValue(usersref);
+                            pushed.setValue(member);
+                            String family_key =pushed.getKey();
+                            value.setFamilyCode(family_key);
+                            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(value);
+                            nofamily.setText("Part of family id: " +family_key);
 
 
 
+                        }
+                        else
+                        {
+                            removeFromFamily(key);
+
+                            usersref.add(key);
+                            member.put(key,value);
+                            //pushed.setValue(usersref);
+                            pushed.setValue(member);
+                            String family_key =pushed.getKey();
+                            value.setFamilyCode(family_key);
+                            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(value);
+                            nofamily.setText("Part of family id: " +family_key);
+
+
+                        }
                     }
-                    else
-                    {
-                        removeFromFamily(key);
 
-                        usersref.add(key);
-                        pushed.setValue(usersref);
-                        String family_key =pushed.getKey();
-                        value.setFamilyCode(family_key);
-                        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(value);
-                        nofamily.setText("Part of family id: " +family_key);
-
-
-                    }
                 }
                 else {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
@@ -240,8 +259,11 @@ public class Settings_fragment extends Fragment {
                             if (task.isSuccessful())
                             {
                                 DataSnapshot dataSnapshot = task.getResult();
-                                GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
-                                ArrayList<String> usersRefDB = dataSnapshot.getValue(t);
+                                //GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
+                                //ArrayList<String> usersRefDB = dataSnapshot.getValue(t);
+                                GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
+                                HashMap<String,userExpense> usersRefDB=dataSnapshot.getValue(t);
+
                                 usersRefDB.remove(key);
                                 userFamily.setValue(usersRefDB);
                             }
@@ -270,8 +292,11 @@ public class Settings_fragment extends Fragment {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot dataSnapshot = task.getResult();
                 userExpense value = dataSnapshot.getValue(userExpense.class);
-                name[0] =value.getFamilyCode();
-                updateFamilyIdText(name[0]);
+                if (value!=null)
+                {
+                    name[0] =value.getFamilyCode();
+                    updateFamilyIdText(name[0]);
+                }
             }
         });
 

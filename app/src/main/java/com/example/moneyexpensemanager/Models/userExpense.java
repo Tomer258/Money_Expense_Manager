@@ -9,6 +9,8 @@ public class userExpense {
 
     String name="";
 
+    String uID="";
+
     private ArrayList<IncomeModel> incomeList=new ArrayList<>();
     private ArrayList<OutcomeModel> outcomeList= new ArrayList<>();
     private int sumOfIncome=0,sumOfOutcome=0;
@@ -97,6 +99,15 @@ public class userExpense {
 
     public userExpense setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public String getuID() {
+        return uID;
+    }
+
+    public userExpense setuID(String uID) {
+        this.uID = uID;
         return this;
     }
 

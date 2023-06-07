@@ -228,7 +228,17 @@ public class Personal_fragment extends Fragment {
         {
             int amountInt=Integer.parseInt(amount.getText().toString().replaceAll("[\\D]",""));
             userExpenseInstance.addOutcome(new OutcomeModel(amountInt,TypeSpinnerResult,CategorySpinnerResult,description.getText().toString()));
+
+            if (userExpenseInstance.getName().equals(""))
+                userExpenseInstance.setName(getActivity().getIntent().getExtras().getString("username"));
+
+            if (userExpenseInstance.getuID().equals(""))
+                userExpenseInstance.setuID(FirebaseAuth.getInstance().getUid());
+
             mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userExpenseInstance);
+
+            if (!(userExpenseInstance.getFamilyCode().equals("")))
+                mDatabase.child("families").child(userExpenseInstance.getFamilyCode()).child(FirebaseAuth.getInstance().getUid()).setValue(userExpenseInstance);
 
         }
         amount.getText().clear();
@@ -245,8 +255,15 @@ public class Personal_fragment extends Fragment {
         {
             int amountInt=Integer.parseInt(amount.getText().toString().replaceAll("[\\D]",""));
             userExpenseInstance.addIncome(new IncomeModel(amountInt,TypeSpinnerResult,CategorySpinnerResult,description.getText().toString()));
+            if (userExpenseInstance.getName().equals(""))
+                userExpenseInstance.setName(getActivity().getIntent().getExtras().getString("username"));
+
+            if (userExpenseInstance.getuID().equals(""))
+                userExpenseInstance.setuID(FirebaseAuth.getInstance().getUid());
 
             mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userExpenseInstance);
+            if (!(userExpenseInstance.getFamilyCode().equals("")))
+                mDatabase.child("families").child(userExpenseInstance.getFamilyCode()).child(FirebaseAuth.getInstance().getUid()).setValue(userExpenseInstance);
         }
         amount.getText().clear();
         description.getText().clear();
