@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Shared_expense_fragment extends Fragment {
-    RecyclerView recyclerView;
+    RecyclerView incomeRecyclerView,outcomeRecyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,7 +39,8 @@ public class Shared_expense_fragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view =inflater.inflate(R.layout.fragment_shared_expense_fragment, container, false);
-        recyclerView=view.findViewById(R.id.mSharedRecyclerView);
+        incomeRecyclerView=view.findViewById(R.id.mIncomeSharedRecyclerView);
+        outcomeRecyclerView=view.findViewById(R.id.mOutcomeSharedRecyclerView);
         initFragment(view);
         return view;
     }
@@ -133,6 +134,13 @@ public class Shared_expense_fragment extends Fragment {
 
     private void createRV(String name, HashMap<String,userExpense> members)
     {
+        refreshIncomeList();
+        refreshOutcomeList();
+    }
 
+    private void refreshOutcomeList() {
+    }
+
+    private void refreshIncomeList() {
     }
 }
