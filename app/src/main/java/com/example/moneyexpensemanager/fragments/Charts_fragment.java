@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.anychart.APIlib;
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
@@ -58,9 +59,10 @@ public class Charts_fragment extends Fragment {
 
     private void initGraph(View view)
     {
-        anyChartView =view.findViewById(R.id.graph1);
-        anyChartView.setProgressBar(view.findViewById(R.id.progress_bar1));
         Pie pie = AnyChart.pie();
+        anyChartView =view.findViewById(R.id.any_chart_view);
+        anyChartView.setProgressBar(view.findViewById(R.id.progress_bar));
+
 
         pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
             @Override
@@ -139,6 +141,7 @@ public class Charts_fragment extends Fragment {
         pie.data(data);
 
         anyChartView.setChart(pie);
+        APIlib.getInstance().setActiveAnyChartView(anyChartView);
     }
 
 
