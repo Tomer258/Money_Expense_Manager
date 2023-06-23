@@ -9,22 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.anychart.APIlib;
-import com.anychart.AnyChart;
-import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.chart.common.listener.Event;
-import com.anychart.chart.common.listener.ListenersInterface;
-import com.anychart.charts.Cartesian;
-import com.anychart.charts.Pie;
-import com.anychart.enums.Align;
-import com.anychart.enums.LegendLayout;
-import com.anychart.enums.TooltipPositionMode;
-import com.anychart.graphics.vector.Stroke;
-import com.example.moneyexpensemanager.Models.OutcomeModel;
 import com.example.moneyexpensemanager.Models.userExpense;
 import com.example.moneyexpensemanager.R;
 import com.github.mikephil.charting.charts.PieChart;
@@ -32,8 +16,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,13 +28,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class Charts_fragment extends Fragment {
 
 
 
-    List<PieEntry> data = new ArrayList<>();
+
     PieChart pieChart;
 
     @Override
@@ -65,21 +48,21 @@ public class Charts_fragment extends Fragment {
         pieChart=view.findViewById(R.id.pie1);
 
 
-        initGraph(view);
+        initGraph();
 
 
 
         return view;
     }
 
-    private void initGraph(View view)
+    private void initGraph()
     {
         processDataBase();
     }
 
     private void processDataBase()
     {
-        DatabaseReference users= FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid());
+        DatabaseReference users= FirebaseDatabase.getInstance().getReference("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()));
         users.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -90,23 +73,20 @@ public class Charts_fragment extends Fragment {
                 {
                     String code=value.getFamilyCode();
                     DatabaseReference userFamily=FirebaseDatabase.getInstance().getReference().child("families").child(code);
-                    userFamily.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (task.isSuccessful())
+                    userFamily.get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful())
+                        {
+                            DataSnapshot dataSnapshot1 = task.getResult();
+                            GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
+                            HashMap<String,userExpense> usersRefDB= dataSnapshot1.getValue(t);
+                            if (usersRefDB!=null)
                             {
-                                DataSnapshot dataSnapshot = task.getResult();
-                                GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
-                                HashMap<String,userExpense> usersRefDB=dataSnapshot.getValue(t);
-                                if (usersRefDB!=null)
-                                {
-                                    buildGraph(usersRefDB);
-                                }
+                                buildGraph(usersRefDB);
                             }
-                            else
-                            {
-                                Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                            }
+                        }
+                        else
+                        {
+                            Log.d("firebase", String.valueOf(task.getResult().getValue()));
                         }
                     });
 
@@ -118,7 +98,7 @@ public class Charts_fragment extends Fragment {
     }
 
     private void buildGraph(HashMap<String, userExpense> usersRefDB) {
-
+        List<PieEntry> data = new ArrayList<>();
         for (Map.Entry<String,userExpense> entry : usersRefDB.entrySet()) {
             data.add(new PieEntry(entry.getValue().getSumOfIncome(),entry.getValue().getName()));
         }
