@@ -27,6 +27,11 @@ import com.anychart.graphics.vector.Stroke;
 import com.example.moneyexpensemanager.Models.OutcomeModel;
 import com.example.moneyexpensemanager.Models.userExpense;
 import com.example.moneyexpensemanager.R;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,54 +50,34 @@ import java.util.Map;
 
 public class Charts_fragment extends Fragment {
 
-    AnyChartView anyChartView;
+
+
+    List<PieEntry> data = new ArrayList<>();
+    PieChart pieChart;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_charts_fragment, container, false);
+
+
+        pieChart=view.findViewById(R.id.pie1);
+
+
         initGraph(view);
+
+
 
         return view;
     }
 
     private void initGraph(View view)
     {
-        Pie pie = AnyChart.pie();
-        anyChartView =view.findViewById(R.id.any_chart_view);
-        anyChartView.setProgressBar(view.findViewById(R.id.progress_bar));
-
-
-        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
-            @Override
-            public void onClick(Event event) {
-                Toast.makeText(getActivity(), event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        pie.title("Family member's income");
-
-        pie.labels().position("outside");
-
-        pie.legend().title().enabled(true);
-        pie.legend().title()
-                .text("Retail channels")
-                .padding(0d, 0d, 10d, 0d);
-
-        pie.legend()
-                .position("center-bottom")
-                .itemsLayout(LegendLayout.HORIZONTAL)
-                .align(Align.CENTER);
-
-
-
-        processDataBase(pie);
-
-
+        processDataBase();
     }
 
-    private void processDataBase(Pie pie)
+    private void processDataBase()
     {
         DatabaseReference users= FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid());
         users.addValueEventListener(new ValueEventListener()
@@ -115,7 +100,7 @@ public class Charts_fragment extends Fragment {
                                 HashMap<String,userExpense> usersRefDB=dataSnapshot.getValue(t);
                                 if (usersRefDB!=null)
                                 {
-                                    buildGraph(usersRefDB,pie);
+                                    buildGraph(usersRefDB);
                                 }
                             }
                             else
@@ -132,16 +117,18 @@ public class Charts_fragment extends Fragment {
         });
     }
 
-    private void buildGraph(HashMap<String, userExpense> usersRefDB, Pie pie) {
-        List<DataEntry> data = new ArrayList<>();
+    private void buildGraph(HashMap<String, userExpense> usersRefDB) {
 
         for (Map.Entry<String,userExpense> entry : usersRefDB.entrySet()) {
-            data.add(new ValueDataEntry((entry.getValue().getName()),entry.getValue().getSumOfIncome()));
+            data.add(new PieEntry(entry.getValue().getSumOfIncome(),entry.getValue().getName()));
         }
-        pie.data(data);
+        PieDataSet pieDataSet=new PieDataSet(data,"PieChart");
+        PieData pieData=new PieData(pieDataSet);
+        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieDataSet.setValueTextSize(12f);
+        pieChart.setData(pieData);
+        pieChart.invalidate();
 
-        anyChartView.setChart(pie);
-        APIlib.getInstance().setActiveAnyChartView(anyChartView);
     }
 
 

@@ -6,17 +6,23 @@
     tools:context=".fragments.Charts_fragment">
 
 
-        <com.anychart.AnyChartView
+<!--        <com.anychart.AnyChartView
             android:id="@+id/any_chart_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="600dp" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
-
+            android:layout_centerInParent="true"
+            />-->
+<com.github.mikephil.charting.charts.PieChart
+    android:layout_width="350dp"
+    android:layout_height="350dp"
+    android:id="@+id/pie1"
+    android:layout_centerHorizontal="true"
+    />
 
 
 
