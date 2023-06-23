@@ -129,7 +129,7 @@ public class Shared_expense_fragment extends Fragment {
             names.put(entry.getValue().getName(),entry.getValue().getuID());
         }
 
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item,memberNames);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,memberNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         memberSpinner.setAdapter(adapter);
         memberSpinner.setSelection(savedPos);
