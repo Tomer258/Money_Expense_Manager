@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.moneyexpensemanager.Adapters.RecyclerViewAdapter;
-import com.example.moneyexpensemanager.Models.IncomeModel;
 import com.example.moneyexpensemanager.Models.OutcomeModel;
 import com.example.moneyexpensemanager.Models.userExpense;
 import com.example.moneyexpensemanager.R;
