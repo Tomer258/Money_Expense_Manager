@@ -19,9 +19,9 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
-    ArrayList<IncomeModel> income;
-    ArrayList<OutcomeModel> outcome;
-    int type;
+    private ArrayList<IncomeModel> income;
+     private ArrayList<OutcomeModel> outcome;
+    private int type;
 
     //type:  0 - income , 1 - outcome,
     public RecyclerViewAdapter(ArrayList<IncomeModel> incomeModel, ArrayList<OutcomeModel> outcomeModel, int type)

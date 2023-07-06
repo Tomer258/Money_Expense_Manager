@@ -36,13 +36,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Settings_fragment extends Fragment {
-    TextView textView,nofamily;
-    Button disconnectBTN,createFamilyBTN,joinFamilyBTN;
+    private TextView textView,nofamily;
+    private Button disconnectBTN,createFamilyBTN,joinFamilyBTN,clearIncomeBTN,clearOutcomeBTN,clearAllBTN;
 
-    EditText familyCodeET;
+    private EditText familyCodeET;
 
-    ArrayList<String> usersref=new ArrayList<>();
-    HashMap<String,userExpense> member=new HashMap<>();
+    private  ArrayList<String> usersref=new ArrayList<>();
+    private HashMap<String,userExpense> member=new HashMap<>();
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     @Override
@@ -66,6 +66,9 @@ public class Settings_fragment extends Fragment {
         joinFamilyBTN=view.findViewById(R.id.joinFamily_BTN_settings);
         familyCodeET=view.findViewById(R.id.join_family_ET);
         nofamily = view.findViewById(R.id.no_family_TXT);
+        clearIncomeBTN=view.findViewById(R.id.clearIncome_BTN_settings);;
+        clearOutcomeBTN=view.findViewById(R.id.clearOutcome_BTN_settings);
+        clearAllBTN=view.findViewById(R.id.clearall_BTN_settings);
         checkIfInFamily();
 
 
@@ -94,6 +97,27 @@ public class Settings_fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 joinFamily();
+            }
+        });
+
+        clearIncomeBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteData(0);
+            }
+        });
+
+        clearOutcomeBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteData(1);
+            }
+        });
+
+        clearAllBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteData(2);
             }
         });
     }
@@ -308,6 +332,50 @@ public class Settings_fragment extends Fragment {
             nofamily.setText("Part of family id: " +name);
     }
 
+    private void deleteData(int choice)
+    {
+        DatabaseReference user=FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid());
+
+        user.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DataSnapshot dataSnapshot = task.getResult();
+                    userExpense value = dataSnapshot.getValue(userExpense.class);
+                    if (value!=null)
+                    {
+                        switch (choice)
+                        {
+                            case 0:
+                            {
+                                value.clearIncome();
+                                break;
+                            }
+
+                            case 1:
+                            {
+                                value.clearOutcome();
+                                break;
+                            }
+
+                            case 2:
+                            {
+                                value.clearIncome();
+                                value.clearOutcome();
+                                break;
+                            }
+                        }
+
+                        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(value);
+                    }
+
+                }
+                else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                }
+            }
+        });
+    }
 
 
 }

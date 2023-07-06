@@ -32,13 +32,13 @@ import java.util.ArrayList;
 public class Personal_Outcome_fragment extends Fragment {
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    ArrayList<OutcomeModel> outcome;
-    userExpense userExpenseInstance = new userExpense();
-    TextView noListFound;
+    private ArrayList<OutcomeModel> outcome;
+    private  userExpense userExpenseInstance = new userExpense();
+    private  TextView noListFound;
 
-    RecyclerView recyclerView;
+    private  RecyclerView recyclerView;
 
-    Context context;
+    private  Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

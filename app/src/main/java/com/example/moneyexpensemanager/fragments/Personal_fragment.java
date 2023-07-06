@@ -55,17 +55,17 @@ import com.google.firebase.firestore.SetOptions;
 
 public class Personal_fragment extends Fragment {
 
-    ViewPager2 viewPager2;
-    TabLayout tabLayout;
-    FloatingActionButton addButton;
-    String TypeSpinnerResult,CategorySpinnerResult;
-    Dialog dialog;
-    String type="";
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+   private ViewPager2 viewPager2;
+    private TabLayout tabLayout;
+    private FloatingActionButton addButton;
+    private String TypeSpinnerResult,CategorySpinnerResult;
+    private Dialog dialog;
+    private  String type="";
+    private  FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    Spinner typeSpinner,categorySpinner;
-    TextView totalIncome,totalOutcome,totalBalance;
+    private Spinner typeSpinner,categorySpinner;
+    private  TextView totalIncome,totalOutcome,totalBalance;
     private userExpense userExpenseInstance;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

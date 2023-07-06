@@ -11,10 +11,9 @@ import com.google.android.material.tabs.TabLayout;
 
 public class myViewpagerAdapter extends FragmentStateAdapter
 {
-    TabLayout tabLayout;
+    private TabLayout tabLayout;
     public myViewpagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
-        this.tabLayout=tabLayout;
     }
 
     @NonNull

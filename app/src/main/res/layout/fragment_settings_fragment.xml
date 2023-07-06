@@ -100,19 +100,18 @@
             />
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
             android:id="@+id/join_family_ET"
-            android:background="@drawable/lavender_border"
-            android:layout_marginTop="20dp"
-            android:paddingStart="16dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:hint="Enter family code"
-            android:gravity="start|center_vertical"
-            android:textColor="@color/lavender"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             android:layout_below="@+id/got_family_TXT"
-            />
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/lavender_border"
+            android:gravity="start|center_vertical"
+            android:hint="Enter family code"
+            android:paddingStart="16dp"
+            android:textColor="@color/lavender" />
 
         <Button
             android:id="@+id/joinFamily_BTN_settings"
@@ -132,12 +131,53 @@
         android:layout_height="6dp"
         android:background="#000000"
         android:orientation="vertical" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Settings fragment"
-        android:gravity="center"
-        android:textSize="32sp"/>
+        android:id="@+id/data_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data Actions"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        />
+
+    <Button
+        android:id="@+id/clearIncome_BTN_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear Income"
+        android:textSize="12sp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/data_info"
+        android:layout_marginStart="15dp"
+        />
+    <Button
+        android:id="@+id/clearOutcome_BTN_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear Outcome"
+        android:textSize="12sp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/data_info"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        />
+
+    <Button
+        android:id="@+id/clearall_BTN_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear all data"
+        android:textSize="12sp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/data_info"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        />
+
 
 
 

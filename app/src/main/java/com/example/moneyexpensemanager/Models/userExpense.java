@@ -43,6 +43,18 @@ public class userExpense {
             this.sumOfOutcome-=outcomeModel.getOutcomeAmount();
     }
 
+    public void clearIncome()
+    {
+        incomeList.clear();
+        this.sumOfIncome=0;
+    }
+
+    public void clearOutcome()
+    {
+        outcomeList.clear();
+        this.sumOfOutcome=0;
+    }
+
     public ArrayList<IncomeModel> getIncomeList() {
         return incomeList;
     }

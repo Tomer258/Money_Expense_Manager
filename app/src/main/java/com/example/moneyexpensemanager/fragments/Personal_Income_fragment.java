@@ -37,13 +37,13 @@ import java.util.ArrayList;
 public class Personal_Income_fragment extends Fragment {
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    ArrayList<IncomeModel> income;
-    userExpense userExpenseInstance = new userExpense();
-    TextView noListFound;
+    private ArrayList<IncomeModel> income;
+    private  userExpense userExpenseInstance = new userExpense();
+    private  TextView noListFound;
 
-    RecyclerView recyclerView;
+    private  RecyclerView recyclerView;
 
-    Context context;
+    private  Context context;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
