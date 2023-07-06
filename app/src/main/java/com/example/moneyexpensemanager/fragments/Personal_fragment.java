@@ -33,7 +33,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
+
 
 
 public class Personal_fragment extends Fragment {
@@ -44,7 +44,6 @@ public class Personal_fragment extends Fragment {
     private String TypeSpinnerResult,CategorySpinnerResult;
     private Dialog dialog;
     private  String type="";
-    private  FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private Spinner typeSpinner,categorySpinner;
@@ -105,12 +104,7 @@ public class Personal_fragment extends Fragment {
                 initSpinners();
             }
         });
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-            }
-        });
+        addButton.setOnClickListener(v -> dialog.show());
 
         return view;
     }
@@ -127,22 +121,16 @@ public class Personal_fragment extends Fragment {
         Button cancel =dialog.findViewById(R.id.cancelBtn);
         Button add = dialog.findViewById(R.id.addButton);
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(),"DEAD DIALOG",Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
+        cancel.setOnClickListener(v -> {
+            Toast.makeText(getContext(),"DEAD DIALOG",Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         });
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (type.equals("Income"))
-                    addIncomeToUser();
-                else
-                    addOutcomeToUser();
-                dialog.dismiss();
-            }
+        add.setOnClickListener(v -> {
+            if (type.equals("Income"))
+                addIncomeToUser();
+            else
+                addOutcomeToUser();
+            dialog.dismiss();
         });
 
 

@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.moneyexpensemanager.fragments.Personal_Income_fragment;
 import com.example.moneyexpensemanager.fragments.Personal_Outcome_fragment;
+import com.example.moneyexpensemanager.fragments.Personal_fragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class myViewpagerAdapter extends FragmentStateAdapter
@@ -31,7 +32,7 @@ public class myViewpagerAdapter extends FragmentStateAdapter
             }
             default:
             {
-                return null;
+                return new Fragment();
             }
         }
 
