@@ -250,7 +250,7 @@ public class Personal_fragment extends Fragment {
         EditText amount=dialog.findViewById(R.id.addAmount_TXT);
         EditText description=dialog.findViewById(R.id.addDescription);
         if (amount.getText().toString().equals("") ||description.getText().toString().equals(""))
-            Toast.makeText(getContext(), "Unvalid input",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Invalid input",Toast.LENGTH_SHORT).show();
         else
         {
             int amountInt=Integer.parseInt(amount.getText().toString().replaceAll("[\\D]",""));

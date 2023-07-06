@@ -106,6 +106,8 @@ public class Shared_expense_fragment extends Fragment {
 
                         }
                     });
+
+
                 }
                 else {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
@@ -154,7 +156,6 @@ public class Shared_expense_fragment extends Fragment {
         ArrayList<IncomeModel> incomeModels=members.get(uId).getIncomeList();
         ArrayList<OutcomeModel> outcomeModels = members.get(uId).getOutcomeList();
 
-        Log.d("gg","gg");
         refreshIncomeList(incomeModels);
         refreshOutcomeList(outcomeModels);
     }

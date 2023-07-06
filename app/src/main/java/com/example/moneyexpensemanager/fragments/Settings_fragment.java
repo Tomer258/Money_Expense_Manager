@@ -366,7 +366,9 @@ public class Settings_fragment extends Fragment {
                             }
                         }
 
-                        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(value);
+                        user.setValue(value);
+                        if (!(value.getFamilyCode().equals("")))
+                            mDatabase.child("families").child(value.getFamilyCode()).child(FirebaseAuth.getInstance().getUid()).setValue(value);
                     }
 
                 }
