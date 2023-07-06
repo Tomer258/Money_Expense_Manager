@@ -36,7 +36,7 @@ public class Charts_fragment extends Fragment {
 
 
 
-    PieChart pieChart;
+     private PieChart pieChart,outPieChart;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +46,7 @@ public class Charts_fragment extends Fragment {
 
 
         pieChart=view.findViewById(R.id.pie1);
+        outPieChart=view.findViewById(R.id.pie2);
 
 
         initGraph();
@@ -99,15 +100,27 @@ public class Charts_fragment extends Fragment {
 
     private void buildGraph(HashMap<String, userExpense> usersRefDB) {
         List<PieEntry> data = new ArrayList<>();
+        List<PieEntry> outcomeData=new ArrayList<>();
         for (Map.Entry<String,userExpense> entry : usersRefDB.entrySet()) {
             data.add(new PieEntry(entry.getValue().getSumOfIncome(),entry.getValue().getName()));
+            outcomeData.add(new PieEntry(entry.getValue().getSumOfOutcome(),entry.getValue().getName()));
         }
-        PieDataSet pieDataSet=new PieDataSet(data,"PieChart");
+        //income
+        PieDataSet pieDataSet=new PieDataSet(data,"income");
         PieData pieData=new PieData(pieDataSet);
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         pieDataSet.setValueTextSize(12f);
         pieChart.setData(pieData);
         pieChart.invalidate();
+
+        //outcome
+
+        PieDataSet pieDataSet2=new PieDataSet(outcomeData,"outcome");
+        PieData pieData2=new PieData(pieDataSet2);
+        pieDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieDataSet2.setValueTextSize(12f);
+        outPieChart.setData(pieData2);
+        outPieChart.invalidate();
 
     }
 
