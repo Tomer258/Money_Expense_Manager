@@ -26,12 +26,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class Personal_Outcome_fragment extends Fragment {
 
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    private ArrayList<OutcomeModel> outcome;
     private  userExpense userExpenseInstance = new userExpense();
     private  TextView noListFound;
 
@@ -52,7 +51,7 @@ public class Personal_Outcome_fragment extends Fragment {
 
     private void processDataBase()
     {
-        DatabaseReference users= FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid());
+        DatabaseReference users= FirebaseDatabase.getInstance().getReference("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()));
         users.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -72,7 +71,7 @@ public class Personal_Outcome_fragment extends Fragment {
 
     private void updateRV()
     {
-        outcome=userExpenseInstance.getOutcomeList();
+        ArrayList<OutcomeModel> outcome = userExpenseInstance.getOutcomeList();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(null, outcome, 1);
