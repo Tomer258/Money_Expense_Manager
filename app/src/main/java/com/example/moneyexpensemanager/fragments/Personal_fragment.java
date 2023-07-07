@@ -34,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
 
 
 public class Personal_fragment extends Fragment {
@@ -45,7 +46,7 @@ public class Personal_fragment extends Fragment {
     private Dialog dialog;
     private  String type="";
 
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private Spinner typeSpinner,categorySpinner;
     private  TextView totalIncome,totalOutcome,totalBalance;
     private userExpense userExpenseInstance;
@@ -78,7 +79,7 @@ public class Personal_fragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager2.setCurrentItem(tab.getPosition());
 
-                type=tabLayout.getTabAt(tab.getPosition()).getText().toString();
+                type= Objects.requireNonNull(Objects.requireNonNull(tabLayout.getTabAt(tab.getPosition())).getText()).toString();
                 initSpinners();
 
             }
@@ -98,9 +99,9 @@ public class Personal_fragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                tabLayout.getTabAt(position).select();
+                Objects.requireNonNull(tabLayout.getTabAt(position)).select();
 
-                type=tabLayout.getTabAt(position).getText().toString();
+                type= Objects.requireNonNull(Objects.requireNonNull(tabLayout.getTabAt(position)).getText()).toString();
                 initSpinners();
             }
         });
@@ -113,7 +114,7 @@ public class Personal_fragment extends Fragment {
         //dialog creation
         dialog=new Dialog(getActivity());
         dialog.setContentView(R.layout.custom_add_income_dialog);
-        dialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
+        dialog.getWindow().setBackgroundDrawable(getDrawable(requireActivity(),R.drawable.dialog_background));
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
 
@@ -179,7 +180,7 @@ public class Personal_fragment extends Fragment {
     {
         tabLayout=view.findViewById(R.id.tabLayout_container);
         viewPager2=view.findViewById(R.id.personal_viewPager);
-        FragmentStateAdapter fragmentStateAdapter=new myViewpagerAdapter(getActivity());
+        FragmentStateAdapter fragmentStateAdapter=new myViewpagerAdapter(requireActivity());
         viewPager2.setAdapter(fragmentStateAdapter);
         addButton=view.findViewById(R.id.main_addBTN);
         typeSpinner=dialog.findViewById(R.id.typeSpinner);
@@ -194,22 +195,22 @@ public class Personal_fragment extends Fragment {
         EditText amount=dialog.findViewById(R.id.addAmount_TXT);
         EditText description=dialog.findViewById(R.id.addDescription);
         if (amount.getText().toString().equals("") ||description.getText().toString().equals(""))
-            Toast.makeText(getContext(), "Unvalid input",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Invalid input",Toast.LENGTH_SHORT).show();
         else
         {
             int amountInt=Integer.parseInt(amount.getText().toString().replaceAll("[\\D]",""));
             userExpenseInstance.addOutcome(new OutcomeModel(amountInt,TypeSpinnerResult,CategorySpinnerResult,description.getText().toString()));
 
             if (userExpenseInstance.getName().equals(""))
-                userExpenseInstance.setName(getActivity().getIntent().getExtras().getString("username"));
+                userExpenseInstance.setName(requireActivity().getIntent().getExtras().getString("username"));
 
             if (userExpenseInstance.getuID().equals(""))
                 userExpenseInstance.setuID(FirebaseAuth.getInstance().getUid());
 
-            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userExpenseInstance);
+            mDatabase.child("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(userExpenseInstance);
 
             if (!(userExpenseInstance.getFamilyCode().equals("")))
-                mDatabase.child("families").child(userExpenseInstance.getFamilyCode()).child(FirebaseAuth.getInstance().getUid()).setValue(userExpenseInstance);
+                mDatabase.child("families").child(userExpenseInstance.getFamilyCode()).child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).setValue(userExpenseInstance);
 
         }
         amount.getText().clear();
@@ -227,14 +228,14 @@ public class Personal_fragment extends Fragment {
             int amountInt=Integer.parseInt(amount.getText().toString().replaceAll("[\\D]",""));
             userExpenseInstance.addIncome(new IncomeModel(amountInt,TypeSpinnerResult,CategorySpinnerResult,description.getText().toString()));
             if (userExpenseInstance.getName().equals(""))
-                userExpenseInstance.setName(getActivity().getIntent().getExtras().getString("username"));
+                userExpenseInstance.setName(requireActivity().getIntent().getExtras().getString("username"));
 
             if (userExpenseInstance.getuID().equals(""))
                 userExpenseInstance.setuID(FirebaseAuth.getInstance().getUid());
 
-            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userExpenseInstance);
+            mDatabase.child("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(userExpenseInstance);
             if (!(userExpenseInstance.getFamilyCode().equals("")))
-                mDatabase.child("families").child(userExpenseInstance.getFamilyCode()).child(FirebaseAuth.getInstance().getUid()).setValue(userExpenseInstance);
+                mDatabase.child("families").child(userExpenseInstance.getFamilyCode()).child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).setValue(userExpenseInstance);
         }
         amount.getText().clear();
         description.getText().clear();
@@ -242,7 +243,7 @@ public class Personal_fragment extends Fragment {
 
     private void getUserExpense()
     {
-        DatabaseReference users=FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid());
+        DatabaseReference users=FirebaseDatabase.getInstance().getReference("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()));
         users.addValueEventListener(new ValueEventListener()
         {
             @Override
