@@ -117,7 +117,6 @@ public class Settings_fragment extends Fragment {
             }
         });
     }
-
     private void joinFamily() {
         DatabaseReference user=FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid());
         String code=familyCodeET.getText().toString();
@@ -143,11 +142,8 @@ public class Settings_fragment extends Fragment {
                                     if (task.isSuccessful())
                                     {
                                         DataSnapshot dataSnapshot = task.getResult();
-                                        //GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
-                                        //ArrayList<String> usersRefDB = dataSnapshot.getValue(t);
                                         GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
                                         HashMap<String,userExpense> usersRefDB=dataSnapshot.getValue(t);
-                                        //usersRefDB.add(key);
                                         usersRefDB.put(key,value);
                                         family.setValue(usersRefDB);
 
@@ -171,11 +167,9 @@ public class Settings_fragment extends Fragment {
                                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                                         if (task.isSuccessful())
                                         {
-                                            //GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
-                                            //ArrayList<String> usersRefDB = dataSnapshot.getValue(t);
+                                            DataSnapshot dataSnapshot = task.getResult();
                                             GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
                                             HashMap<String,userExpense> usersRefDB=dataSnapshot.getValue(t);
-                                            //usersRefDB.add(key);
                                             usersRefDB.put(key,value);
                                             family.setValue(usersRefDB);
 
@@ -220,28 +214,23 @@ public class Settings_fragment extends Fragment {
                         if (value.getFamilyCode().equals(""))
                         {
                             usersref.add(key);
+                            String family_key =pushed.getKey();
+                            value.setFamilyCode(family_key);
                             member.put(key,value);
                             //pushed.setValue(usersref);
                             pushed.setValue(member);
-                            String family_key =pushed.getKey();
-                            value.setFamilyCode(family_key);
-                            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(value);
+                            user.setValue(value);
                             nofamily.setText("Part of family id: " +family_key);
-
-
-
                         }
                         else
                         {
                             removeFromFamily(key);
-
                             usersref.add(key);
-                            member.put(key,value);
-                            //pushed.setValue(usersref);
-                            pushed.setValue(member);
                             String family_key =pushed.getKey();
                             value.setFamilyCode(family_key);
-                            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(value);
+                            member.put(key,value);
+                            pushed.setValue(member);
+                            user.setValue(value);
                             nofamily.setText("Part of family id: " +family_key);
 
 
@@ -271,16 +260,13 @@ public class Settings_fragment extends Fragment {
                     DataSnapshot dataSnapshot = task.getResult();
                     userExpense value = dataSnapshot.getValue(userExpense.class);
                     DatabaseReference userFamily=mDatabase.child("families").child(value.getFamilyCode());
-                    //Query mQuery = userFamily.equalTo(key);
-                    //mQuery.getRef().removeValue();
                     userFamily.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             if (task.isSuccessful())
                             {
                                 DataSnapshot dataSnapshot = task.getResult();
-                                //GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
-                                //ArrayList<String> usersRefDB = dataSnapshot.getValue(t);
+
                                 GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
                                 HashMap<String,userExpense> usersRefDB=dataSnapshot.getValue(t);
 
@@ -293,6 +279,7 @@ public class Settings_fragment extends Fragment {
                             }
                         }
                     });
+
                 }
                 else {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
@@ -301,6 +288,7 @@ public class Settings_fragment extends Fragment {
         });
 
     }
+
 
     //check if user have family id. if no family id returns "" else, returns the id
     private void checkIfInFamily()
