@@ -77,6 +77,7 @@
         android:text="No family? "
         android:textSize="18sp"
         android:layout_below="@+id/family_info"
+        android:textIsSelectable="true"
         />
 
     <Button
