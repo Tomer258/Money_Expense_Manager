@@ -6,7 +6,7 @@ import java.util.Locale;
 
 public class OutcomeModel {
     private int outcomeAmount=0;
-    private String date,type,category,description;
+    private String date="",type="",category="",description="";
 
     public OutcomeModel(int outcomeAmount, String type, String category, String description) {
         this.outcomeAmount = outcomeAmount;

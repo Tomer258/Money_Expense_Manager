@@ -65,44 +65,52 @@ public class Shared_expense_fragment extends Fragment {
                 if (task.isSuccessful()) {
                     DataSnapshot dataSnapshot = task.getResult();
                     userExpense value = dataSnapshot.getValue(userExpense.class);
-                    String code=value.getFamilyCode();
-                    DatabaseReference userFamily=FirebaseDatabase.getInstance().getReference().child("families").child(code);
-                    userFamily.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (task.isSuccessful())
-                            {
-                                DataSnapshot dataSnapshot = task.getResult();
-                                GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
-                                HashMap<String,userExpense> usersRefDB=dataSnapshot.getValue(t);
-                                if (usersRefDB!=null)
-                                {
-                                    initSpinner(view,usersRefDB);
+                    String code;
+                    if (value != null) {
+                        code = value.getFamilyCode();
+                        if (!code.equals(""))
+                        {
+                            DatabaseReference userFamily=FirebaseDatabase.getInstance().getReference().child("families").child(code);
+                            userFamily.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (task.isSuccessful())
+                                    {
+                                        DataSnapshot dataSnapshot = task.getResult();
+                                        GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
+                                        HashMap<String,userExpense> usersRefDB=dataSnapshot.getValue(t);
+                                        if (usersRefDB!=null)
+                                        {
+                                            initSpinner(view,usersRefDB);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                            }
-                        }
-                    });
+                            });
 
-                    userFamily.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
-                            HashMap<String,userExpense> usersRefDB=snapshot.getValue(t);
-                            if (usersRefDB!=null)
-                            {
-                                initSpinner(view,usersRefDB);
-                            }
+                            userFamily.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
+                                    HashMap<String,userExpense> usersRefDB=snapshot.getValue(t);
+                                    if (usersRefDB!=null)
+                                    {
+                                        initSpinner(view,usersRefDB);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
                         }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                    }
 
-                        }
-                    });
 
 
                 }
@@ -150,11 +158,15 @@ public class Shared_expense_fragment extends Fragment {
 
     private void createRV(String uId, HashMap<String,userExpense> members)
     {
-        ArrayList<IncomeModel> incomeModels=members.get(uId).getIncomeList();
-        ArrayList<OutcomeModel> outcomeModels = members.get(uId).getOutcomeList();
+        if (members!=null)
+        {
+            ArrayList<IncomeModel> incomeModels=members.get(uId).getIncomeList();
+            ArrayList<OutcomeModel> outcomeModels = members.get(uId).getOutcomeList();
 
-        refreshIncomeList(incomeModels);
-        refreshOutcomeList(outcomeModels);
+            refreshIncomeList(incomeModels);
+            refreshOutcomeList(outcomeModels);
+        }
+
     }
 
     private void refreshIncomeList(ArrayList<IncomeModel> income)

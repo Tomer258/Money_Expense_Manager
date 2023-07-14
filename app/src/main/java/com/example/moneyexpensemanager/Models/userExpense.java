@@ -11,12 +11,13 @@ public class userExpense {
 
     String uID="";
 
-    private ArrayList<IncomeModel> incomeList=new ArrayList<>();
-    private ArrayList<OutcomeModel> outcomeList= new ArrayList<>();
+    private ArrayList<IncomeModel> incomeList;
+    private ArrayList<OutcomeModel> outcomeList;
     private int sumOfIncome=0,sumOfOutcome=0;
 
     public userExpense() {
-
+        incomeList=new ArrayList<>();
+        outcomeList= new ArrayList<>();
     }
 
     public void addIncome(IncomeModel incomeModel)

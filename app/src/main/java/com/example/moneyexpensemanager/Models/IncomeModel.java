@@ -7,7 +7,7 @@ import java.util.Locale;
 
 public class IncomeModel {
     private int incomeAmount=0;
-    private String date,type,category,description;
+    private String date="",type="",category="",description="";
 
     public IncomeModel(int incomeAmount, String type, String category, String description) {
         this.incomeAmount = incomeAmount;

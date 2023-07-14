@@ -73,23 +73,27 @@ public class Charts_fragment extends Fragment {
                 if(value!=null)
                 {
                     String code=value.getFamilyCode();
-                    DatabaseReference userFamily=FirebaseDatabase.getInstance().getReference().child("families").child(code);
-                    userFamily.get().addOnCompleteListener(task -> {
-                        if (task.isSuccessful())
-                        {
-                            DataSnapshot dataSnapshot1 = task.getResult();
-                            GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
-                            HashMap<String,userExpense> usersRefDB= dataSnapshot1.getValue(t);
-                            if (usersRefDB!=null)
+                    if (!code.equals(""))
+                    {
+                        DatabaseReference userFamily=FirebaseDatabase.getInstance().getReference().child("families").child(code);
+                        userFamily.get().addOnCompleteListener(task -> {
+                            if (task.isSuccessful())
                             {
-                                buildGraph(usersRefDB);
+                                DataSnapshot dataSnapshot1 = task.getResult();
+                                GenericTypeIndicator<HashMap<String,userExpense>> t = new GenericTypeIndicator<HashMap<String, userExpense>>() {};
+                                HashMap<String,userExpense> usersRefDB= dataSnapshot1.getValue(t);
+                                if (usersRefDB!=null)
+                                {
+                                    buildGraph(usersRefDB);
+                                }
                             }
-                        }
-                        else
-                        {
-                            Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                        }
-                    });
+                            else
+                            {
+                                Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                            }
+                        });
+                    }
+
 
                 }
             }
